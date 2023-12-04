@@ -12,34 +12,32 @@
 
 #include "fractol.h"
 
-void	put_image(t_list *mlx)
+int	create_trgb(int t, int r, int g, int b)
 {
-	if (mlx->img)
-		mlx_destroy_image(mlx->ptr, mlx->img);
-	mlx->img = mlx_new_image(mlx->ptr, WIDTH, HEIGHT);
-	mlx->addr = mlx_get_data_addr(mlx->img, &mlx->bpp, &mlx->line_length, &mlx->endian);
-	if (mlx->fractol == MANDELBROT)
-		mandelbrot(mlx);
-	else if (mlx->fractol == JULIA)
-		julia(mlx);
-	mlx_put_image_to_window(mlx->ptr, mlx->win, mlx->img, 0, 0);
+	return (t << 24 | r << 16 | g << 8 | b);
 }
 
-void	move_window(int keycode, t_list *mlx)
+void	mix_colors(t_list *mlx, int i, int color)
 {
-	double	adjusted;
-
-	adjusted = 0.5;
-	adjusted /= mlx->zoom;
-	if (keycode == XK_Up)
-		mlx->shift_y -= adjusted;
-	else if (keycode == XK_Down)
-		mlx->shift_y += adjusted;
-	else if (keycode == XK_Left)
-		mlx->shift_x -= adjusted;
-	else if (keycode == XK_Right)
-		mlx->shift_x += adjusted;
-	put_image(mlx);
-	mlx->x += mlx->shift_x;
-	mlx->y += mlx->shift_y;
+	if (color == BLUE)
+	{
+		if (i == mlx->max_iter)
+			mlx->color = create_trgb(255, 7, 15, 48);
+		else
+			mlx->color = create_trgb(255,(i *2) % 255, (i *2) % 255, (i * i + 50) % 255);
+	}
+	else if (color == RED)
+	{
+		if (i == mlx->max_iter)
+			mlx->color = create_trgb(255, 48, 10, 7);
+		else
+			mlx->color = create_trgb(255,(i * i + 50) % 255, (i * 2) % 255, (i * 2) % 255);
+	}
+	else if (color == GREEN)
+	{
+		if (i == mlx->max_iter)
+			mlx->color = create_trgb(255, 15, 70, 5);
+		else
+			mlx->color = create_trgb(255,(i * 4) % 255, (i * i + 50) % 255, (i * 2) % 255);
+	}
 }

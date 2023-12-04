@@ -12,25 +12,7 @@
 
 #include "fractol.h"
 
-int	get_iter(t_list *mlx)
-{
-	int 	min_iter = 60;
-	int		updated_iter;
-	double	factor;
-
-	factor = 0.005;
-    if (mlx->zoom != 1)
-	{
-        updated_iter = min_iter * (mlx->zoom * factor);
-		// if (updated_iter < min_iter)
-		// 	updated_iter = min_iter;
-        // return (updated_iter);
-    }
-	// else
-		return (min_iter);
-}
-
-void	mandelbrot(t_list *mlx)
+void	julia(t_list *mlx)
 {
 	t_number	old;
 	t_number	new;
@@ -39,12 +21,12 @@ void	mandelbrot(t_list *mlx)
 	i = 0;
 	mlx->x = 0;
 	mlx->y = 0;
+	//mlx->max_iter = 200;
 	while (mlx->y < HEIGHT)
 	{
 		while (mlx->x < WIDTH)
 		{
-			calc_pi_pr(mlx);
-			calculate_set_mb(mlx, &old, &new);
+			calculate_set_julia(mlx, &old, &new);
 			my_mlx_pixel_put(mlx, mlx->x, mlx->y, mlx->color);
 			mlx->x++;
 		}
@@ -53,30 +35,24 @@ void	mandelbrot(t_list *mlx)
 	}
 }
 
-void	calc_pi_pr(t_list *mlx)
+void calculate_set_julia(t_list *mlx, t_number *old, t_number *new)
 {
-	mlx->pr = 1 * (mlx->x - WIDTH / 2) / (0.5 * mlx->zoom * WIDTH);
-	mlx->pr += mlx->shift_x - 0.5;
-	mlx->pi = (mlx->y - HEIGHT / 2) / (0.5 * mlx->zoom * HEIGHT);
-	mlx->pi += mlx->shift_y;
-}
+    double i = 0;
+    double	tmp;
 
-void	calculate_set_mb(t_list *mlx, t_number *old, t_number *new)
-{
-	double	i;
+   old->re = 1.9 * (mlx->x - WIDTH / 2) / (0.5 * mlx->zoom * WIDTH) + mlx->shift_x;
+   old->im = 1.5 * (mlx->y - HEIGHT / 2) / (0.5 * mlx->zoom * HEIGHT) + mlx->shift_y;
+   new->re = old->re;
+   new->im = old->im;
 
-	i = 0;
-	new->re = new->im = 0;
-	old->re = old->im = 0;
-	while (i < mlx->max_iter)
-	{
-		old->re = new->re;
-		old->im = new->im;
-		new->re = old->re * old->re - old->im * old->im + mlx->pr;
-		new->im = 2 * old->re * old->im + mlx->pi;
-		if (new->re * new->re + new->im * new->im > 4)
-			break ;
-		i++;
-	}
-		mix_colors(mlx, i, mlx->color_param);
+   while (i < mlx->max_iter)
+   {
+       if ((new->re * new->re + new->im * new->im) > 4.0)
+           break ;
+       tmp = 2 * new->re * new->im + mlx->pi;
+       new->re = new->re * new->re - new->im * new->im + mlx->pr;
+       new->im = tmp;
+       i++;
+    }
+    mix_colors(mlx, i, mlx->color_param);
 }

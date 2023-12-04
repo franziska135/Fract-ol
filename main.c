@@ -12,37 +12,25 @@
 
 #include "fractol.h"
 
-// void	calc_pixel(t_list *mlx)
-// {
-// 	int x;
-// 	int y;
-// 	double	re;
-// 	double	im;
+void	my_mlx_pixel_put(t_list *mlx, int x, int y, int color)
+{
+	char	*dst;
 
-// 	x = 0;
-// 	while (x <= WIDTH)
-// 	{
-// 		y = 0;
-// 		while (y <= HEIGTH)
-// 		{
-// 			//rescale_pixel(x, y, mlx);
-// 			re = (((0.5 - (-2)) * x) / ((double)WIDTH)) + (-2);
-// 			im = (((((-1.5) - 1.5) * y) / ((double)HEIGTH)) + 1.5);
-// 			y++;
-// 		}
-// 		x++;
-// 	}
-// }
+	dst = mlx->addr + (y * mlx->line_length + x * (mlx->bpp / 8));
+	*(unsigned int *)dst = color;
+}
 
 int	main(int argc, char *argv[])
 {
 	t_list	mlx;
 
 	if (argc < 2 || valid_fractol(argv) == 0)
-	 	return (params(), 0);
-	if (init_struct(&mlx, argv) == 0)
+		return (params(), 0);
+	if (valid_fractol(argv) == -1)
+		return (help(), 0);
+	if (init_struct(&mlx, argv, argc) == 0)
 		return (0);
-	put_image(&mlx, RED, mlx.x, mlx.y);
+	put_image(&mlx);
 	events(&mlx);
 	(free(mlx.ptr), free(mlx.win));
 	return (0);
