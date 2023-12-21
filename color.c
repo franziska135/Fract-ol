@@ -12,9 +12,9 @@
 
 #include "fractol.h"
 
-int	create_trgb(int t, int r, int g, int b)
+int	c_rgb(int r, int g, int b)
 {
-	return (t << 24 | r << 16 | g << 8 | b);
+	return (r << 16 | g << 8 | b);
 }
 
 void	mix_colors(t_list *mlx, int i, int color)
@@ -22,22 +22,22 @@ void	mix_colors(t_list *mlx, int i, int color)
 	if (color == BLUE)
 	{
 		if (i == mlx->max_iter)
-			mlx->color = create_trgb(255, 7, 15, 48);
+			mlx->col = c_rgb(1, 30, 60);
 		else
-			mlx->color = create_trgb(255,(i *2) % 255, (i *2) % 255, (i * i + 50) % 255);
+			mlx->col = c_rgb((i * 1) % 255, (i * 2 + 10) % 255, (i * 5) % 255);
 	}
 	else if (color == RED)
 	{
 		if (i == mlx->max_iter)
-			mlx->color = create_trgb(255, 48, 10, 7);
+			mlx->col = c_rgb(48, 1, 1);
 		else
-			mlx->color = create_trgb(255,(i * i + 50) % 255, (i * 2) % 255, (i * 2) % 255);
+			mlx->col = c_rgb((i * 5 + 50) % 255, (i * 2) % 255, (i * 2) % 255);
 	}
 	else if (color == GREEN)
 	{
 		if (i == mlx->max_iter)
-			mlx->color = create_trgb(255, 15, 70, 5);
+			mlx->col = c_rgb(1, 70, 20);
 		else
-			mlx->color = create_trgb(255,(i * 4) % 255, (i * i + 50) % 255, (i * 2) % 255);
+			mlx->col = c_rgb((i * 1) % 255, (i * 5) % 255, (i * 2) % 255);
 	}
 }

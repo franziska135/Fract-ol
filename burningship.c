@@ -12,7 +12,7 @@
 
 #include "fractol.h"
 
-void	mandelbrot(t_list *mlx)
+void	burningship(t_list *mlx)
 {
 	t_number	old;
 	t_number	new;
@@ -25,8 +25,8 @@ void	mandelbrot(t_list *mlx)
 	{
 		while (mlx->x < WIDTH)
 		{
-			calc_pi_pr(mlx);
-			calculate_set_mb(mlx, &old, &new);
+			calc_pi_pr_bs(mlx);
+			calculate_set_bs(mlx, &old, &new);
 			my_mlx_pixel_put(mlx, mlx->x, mlx->y, mlx->col);
 			mlx->x++;
 		}
@@ -35,15 +35,15 @@ void	mandelbrot(t_list *mlx)
 	}
 }
 
-void	calc_pi_pr(t_list *mlx)
+void	calc_pi_pr_bs(t_list *mlx)
 {
 	mlx->pr = 1 * (mlx->x - WIDTH / 2) / (0.5 * mlx->zoom * WIDTH);
 	mlx->pr += mlx->shift_x - 0.5;
-	mlx->pi = (mlx->y - HEIGHT / 2) / (0.5 * mlx->zoom * HEIGHT);
+	mlx->pi = 1 * (mlx->y - HEIGHT / 2) / (0.5 * mlx->zoom * HEIGHT);
 	mlx->pi += mlx->shift_y;
 }
 
-void	calculate_set_mb(t_list *mlx, t_number *old, t_number *new)
+void	calculate_set_bs(t_list *mlx, t_number *old, t_number *new)
 {
 	double	i;
 
@@ -56,8 +56,8 @@ void	calculate_set_mb(t_list *mlx, t_number *old, t_number *new)
 	{
 		old->re = new->re;
 		old->im = new->im;
-		new->re = old->re * old->re - old->im * old->im + mlx->pr;
-		new->im = 2 * old->re * old->im + mlx->pi;
+		new->re = fabs(old->re * old->re - old->im * old->im + mlx->pr);
+		new->im = fabs(2 * old->re * old->im + mlx->pi);
 		if (new->re * new->re + new->im * new->im > 4)
 			break ;
 		i++;

@@ -35,42 +35,33 @@ int	ft_strncmp(char *s1, const char *s2, size_t n)
 
 double	ft_atoi(const char *str)
 {
-	int	i;
-	double 	nbr;
-	int	sign;
-	double fraction;
+	int		i;
+	double	nbr;
+	int		sign;
+	double	fraction;
 
 	i = 0;
 	nbr = 0;
 	sign = 1;
-	if (*str == '\0')
-		return (0);
-	while ((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
-		i++;
 	if (str[i] == '+' || str[i] == '-')
 	{
-		if (str[i] == '-')
+		if (str[i++] == '-')
 			sign = -1;
-		i++;
 	}
 	while (ft_isdigit(str[i]))
+		nbr = nbr * 10 + str[i++] - '0';
+	if (str[i++] == '.')
 	{
-		nbr = nbr * 10 + str[i] - '0';
-		i++;
+		fraction = 0.1;
+		while (ft_isdigit(str[i]))
+		{
+			nbr = nbr + fraction * (str[i++] - '0');
+			fraction *= 0.1;
+		}
 	}
-	if (str[i] == '.')
-    {
-        i++;
-        fraction = 0.1;
-        while (ft_isdigit(str[i]))
-        {
-            nbr = nbr + fraction * (str[i] - '0');
-            fraction *= 0.1;
-            i++;
-        }
-    }
 	return (nbr * sign);
 }
+
 int	ft_isdigit(int c)
 {
 	if (c >= '0' && c <= '9')

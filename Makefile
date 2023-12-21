@@ -7,7 +7,7 @@ AR		=	ar rc
 RM		=	rm -f
 
 SRC		=	main.c setup.c events.c libft.c image.c mandelbrot.c \
-			color.c julia.c
+			color.c julia.c burningship.c
 
 OBJ		=	$(SRC:.c=.o)
 
